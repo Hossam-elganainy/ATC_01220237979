@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+
+
+/* body {
+  @apply bg-gray-50;
+} */
+
+/* Apply to the dropdown or any scrollable container */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #9ca3af; /* Background color */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #14b8a6; /* Thumb color (teal-500) */
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #0f766e; /* Darker teal on hover */
+}
+
+/* Remove the problematic active classes */
