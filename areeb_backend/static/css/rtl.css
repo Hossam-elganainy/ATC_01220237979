@@ -1,0 +1,31 @@
+/* rtl.css */
+html[dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+}
+
+html[dir="rtl"] .unfold-sidebar {
+    right: 0;
+    left: auto;
+}
+
+html[dir="rtl"] .unfold-content {
+    margin-right: 260px; /* Adjust based on sidebar width */
+    margin-left: 0;
+}
+
+html[dir="rtl"] .flex-row {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .text-left {
+    text-align: right;
+}
+
+html[dir="rtl"] .float-left {
+    float: right;
+}
+
+html[dir="rtl"] .float-right {
+    float: left;
+}

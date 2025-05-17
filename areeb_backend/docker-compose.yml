@@ -1,0 +1,15 @@
+version: "3"
+
+
+services:
+  django:
+    build: .
+    restart: always
+    command: bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --workers 3 --bind  0.0.0.0:8000 --preload areeb.wsgi:application"
+    container_name: areeb
+    volumes:
+      - .:/areeb
+    env_file:
+      - .env
+    ports:
+      - "8566:8000"
