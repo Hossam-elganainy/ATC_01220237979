@@ -23,7 +23,6 @@ class ReservationAdmin(ModelAdmin):
             type = getattr(request.user, 'type', None)
             if type:
                 return qs.filter(related_type=type)
-            # جرب أيضاً لو اسم الحقل related_branch
             type2 = getattr(request.user, 'related_type', None)
             if type2:
                 return qs.filter(related_type=type2)

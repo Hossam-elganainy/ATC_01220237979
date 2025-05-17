@@ -25,7 +25,7 @@ export default function Signup({setSignUp}) {
       const formData = {
         first_name: data.first_name,
         last_name: data.last_name,
-        id_number: data.id_number,
+        email: data.email,
         password1: data.password1,
         password2: data.password2
       };
@@ -48,7 +48,7 @@ export default function Signup({setSignUp}) {
         localStorage.setItem('UserData', JSON.stringify({
           first_name: data.first_name,
           last_name: data.last_name,
-          id_number: data.id_number,
+          email: data.email,
         }));
        
       }else{
@@ -102,18 +102,18 @@ export default function Signup({setSignUp}) {
         {errors.last_name && <p className="text-red-400 text-right w-full text-sm">{errors.last_name.message}</p>}
 
         <input 
-          type="number" 
-          placeholder='الرقم الوطني' 
+          type="email" 
+          placeholder='البريد الإلكتروني' 
           className='w-full p-2 rounded-lg border border-gray-300'
-          {...register('id_number', {
-            required: 'الرقم الوطني مطلوب',
+          {...register('email', {
+            required: 'البريد الإلكتروني مطلوب',
             pattern: {
-              value: /^\d{10}$/,
-              message: 'الرقم الوطني غير صالح'
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'البريد الإلكتروني غير صالح'
             }
           })}
         />
-        {errors.id_number && <p className="text-red-400 text-right w-full text-sm">{errors.id_number.message}</p>}
+        {errors.email && <p className="text-red-400 text-right w-full text-sm">{errors.email.message}</p>}
 
         <input 
           type="password" 

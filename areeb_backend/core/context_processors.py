@@ -12,7 +12,6 @@ import json
 
 
 def get_dashboard_data(request):
-    # Check if user has permission to view dashboard
     if not request.user.has_perm('users.view_dashboard'):
         return {'dashboard': None}
     reservations = Reservation.objects.all()
@@ -36,7 +35,6 @@ def get_dashboard_data(request):
 
     context['pie_chart_data'] = {'data':event_data,'labels':event_labels}
         
-    # top services reserved table (order by the most reserved)
     top_types = Type.objects.annotate(reservations_count=Count('events__reservations')).annotate(revenue=Sum('events__reservations__price')).order_by('-reservations_count').filter(reservations_count__gt=0)[:5]
     context['top_types'] = top_types
 

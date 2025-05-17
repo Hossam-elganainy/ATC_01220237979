@@ -21,7 +21,6 @@ class ReservationListCreateView(generics.ListCreateAPIView):
         return self.queryset.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        # Set payment_status as 'pending' if payment_method is 'cash'
         if serializer.validated_data.get('payment_method') == 'cash':
             serializer.save(user=self.request.user, payment_status='pending')
         else:
@@ -44,18 +43,15 @@ class ReservationCancelView(APIView):
         if instance.date - current_time < timedelta(hours=24):
             return Response({"error": "Cannot cancel it. This reservation is too close to the date"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # إذا كان الحجز قيد الانتظار أو مكتمل، قم بزيادة عدد المشاركين في الحدث
         if instance.status in ['pending', 'completed']:
             event = instance.event
             event.attendees_count += 1
             
-            # إذا كان الحدث غير نشط (مغلق) وأصبح هناك مكان متاح، قم بإعادة تنشيطه
             if not event.is_active and event.attendees_count > 0:
                 event.is_active = True
                 
             event.save()
 
-        # Handle refund logic
         if instance.payment_status == 'paid':
             if instance.payment_method == 'cash':
                 instance.payment_status = 'waiting_for_refund'
@@ -78,7 +74,6 @@ class AvailableTimeSlotsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
-        # الحصول على التاريخ من الطلب - إذا لم يتم توفيره يستخدم اليوم
         date_param = request.query_params.get('date')
         try:
             if date_param:
@@ -91,7 +86,6 @@ class AvailableTimeSlotsView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
             
-        # تحقق مما إذا كان التاريخ في الماضي
         if date_obj < timezone.now().date():
             return Response(
                 {"error": "لا يمكن الحجز في تاريخ سابق"}, 
@@ -101,12 +95,10 @@ class AvailableTimeSlotsView(APIView):
         # إنشاء قائمة بالفترات المحجوزة فقط
         reserved_time_slots = []
         
-        # الحصول على عدد الحجوزات لكل ساعة في هذا التاريخ
-        for hour in range(8, 21):  # من 8 صباحًا إلى 9 مساءً (8-20)
+        for hour in range(8, 21): 
             start_datetime = datetime.combine(date_obj, time(hour=hour))
             end_datetime = start_datetime + timedelta(hours=1)
             
-            # تحويل إلى timezone-aware datetime إذا كان timezone مُمكّنًا
             start_datetime = timezone.make_aware(start_datetime) if timezone.is_naive(start_datetime) else start_datetime
             end_datetime = timezone.make_aware(end_datetime) if timezone.is_naive(end_datetime) else end_datetime
             
@@ -114,10 +106,9 @@ class AvailableTimeSlotsView(APIView):
             count = Reservation.objects.filter(
                 date__gte=start_datetime,
                 date__lt=end_datetime,
-                status__in=['pending', 'completed']  # استبعاد الحجوزات الملغية
+                status__in=['pending', 'completed']  
             ).count()
             
-            # إضافة الفترة فقط إذا كان بها حجوزات
             if count > 4:
                 time_slot = {
                     "date": date_obj.strftime('%Y-%m-%d'),

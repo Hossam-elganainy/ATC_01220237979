@@ -37,13 +37,11 @@ class Event(models.Model):
         if self.date < today:
             return True
         elif self.date == today:
-            # إذا كان نفس اليوم، تحقق من الوقت
             now = timezone.now().time()
             return self.time < now
         return False
     
     def save(self, *args, **kwargs):
-        # تحديث حالة is_active بناءً على ما إذا كان الحدث قد انتهى
         if self.is_past_event:
             self.is_active = False
         super().save(*args, **kwargs)

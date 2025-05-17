@@ -16,9 +16,9 @@ export default function Page() {
   useEffect(() => {
     async function fetchBranches() {
       try {
-        const response = await fetch("https://areeb.cowdly.com/en/api/branches/");
+        const response = await fetch("https://areeb.cowdly.com/en/api/types/");
         const data = await response.json();
-        const allBranches = [{ id: 'all', name: 'جميع الفروع' }, ...data];
+        const allBranches = [{ id: 'all', name: 'جميع الانواع' }, ...data];
         setBranches(allBranches);
       } catch (error) {
         console.error("Error fetching branches:", error);
@@ -48,7 +48,7 @@ export default function Page() {
 
         {/* Location Dropdown */}
         <div className="relative w-full mb-40 lg:mb-0 lg:w-[300px] my-10 bg-sky-50 px-6 py-2 rounded-2xl pb-5">
-          <h1 className='text-2xl text-sky-900 font-bold mb-5'>اختار الفرع</h1>
+          <h1 className='text-2xl text-sky-900 font-bold mb-5'>اختار النوع</h1>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="w-full flex items-center justify-between px-4 py-3 bg-white text-gray-800 font-semibold rounded-lg shadow-md focus:ring-2 focus:ring-sky-400"
